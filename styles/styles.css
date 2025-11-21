@@ -1,0 +1,59 @@
+/*font imports*/
+@font-face {
+  font-family: 'MiddleEarth';
+  src: url('./fonts/MiddleEarth.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'Bilbo';
+  src: url('./fonts/Bilbo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'card';
+  src: url('./fonts/MiddleEarth2.ttf') format('truetype');
+}
+
+/*globals*/
+body {
+  font-family: 'Bilbo', serif;
+  letter-spacing: 1px;
+  background: #fcf89f;
+background: radial-gradient(circle, rgba(252, 248, 159, 0.99) 0%, rgba(235, 227, 117, 1) 34%, rgba(222, 183, 11, 1) 71%);
+
+}
+
+/*title*/
+.title {
+  font-family: 'MiddleEarth', serif;
+  letter-spacing: 2px;
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+/*form*/
+input {
+    font-family: sans-serif;
+}
+
+.mainForm__submit {
+    font-family: 'card', sans-serif;
+    background: hsl(158, 83%, 14%);
+    transition: transform .05s ease, background-color .15s ease, box-shadow .15s ease;
+}
+
+.mainForm__submit:hover {
+    font-family: 'card', sans-serif;
+    background: hsl(158.5, 82.78%, 40.98%)
+}
+
+
+
+/*card styles*/
+.card {
+  background: rgba(255, 250, 238, 0.8);
+  backdrop-filter: blur(2px);
+  font-family: 'card', sans-serif;
+}
+
+
