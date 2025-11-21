@@ -1,29 +1,31 @@
 # wk1-day3-lvl3-repo
 
-This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX where I’m pulling character info from The One API. This follows the same idea and structure as the Pokémon API assignment we did in Level 2, but now it’s all Middle-earth themed.
+This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX where I’m pulling character info from The One API. This follows the same idea and structure as the Pokémon API assignment we did in Level 2, but now it’s all Middle-earth themed. I’ve added some custom fonts, a parchment-style gradient background, and card styling so the UI fits the theme better.
 
 ---
 
 ## Table of Contents
 
-- [Project Structure](#project-structure)
-- [Postman Notes / API Prep](#postman-notes--api-prep)
-- [Setup (npm)](#setup-npm)
-- [How to Run](#how-to-run)
-- [API Token Setup](#api-token-setup)
-- [checkEnv.js](#checkenvjs)
-- [Linters and GitHub Workflow](#linters-and-github-workflow)
-- [Current UI](#current-ui)
-- [Screenshots](#screenshots)
-- [What’s Next](#whats-next)
-- [Resources](#resources)
+- [wk1-day3-lvl3-repo](#wk1-day3-lvl3-repo)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Postman Notes / API Prep](#postman-notes--api-prep)
+  - [Setup (npm)](#setup-npm)
+  - [How to Run](#how-to-run)
+  - [API Token Setup](#api-token-setup)
+  - [checkEnv.js](#checkenvjs)
+  - [Linters and GitHub Workflow](#linters-and-github-workflow)
+  - [Current UI](#current-ui)
+  - [Screenshots](#screenshots)
+    - [Postman](#postman)
+  - [What’s Next](#whats-next)
+  - [Resources](#resources)
 
 ## Project Structure
 
 Keeping the layout consistent with what we’ve been doing in class:
 
 project/
-
 │
 ├── index.html
 ├── package.json
@@ -36,49 +38,28 @@ project/
 ├── checkEnv.js
 │
 ├── styles/
-│   └── styles.css
+│   ├── styles.css
+│   └── fonts/
+│        ├── MiddleEarth.otf
+│        ├── Bilbo-Regular.ttf
+│        └── MiddleEarth2.ttf
 │
 ├── scripts/
 │   ├── main.js
 │   ├── services/
-│   │     └── getCharactersService.js
+│   │      └── getCharactersService.js
 │   └── components/
-│         └── renderCharacters.js
+│   │       └── renderCharacters.js
 │
 └── .github/
-└── workflows/
-└── linters.yml│
-├── index.html
-├── package.json
-├── package-lock.json
-├── .gitignore
-├── .htmlhintrc
-├── eslint.config.cjs
-├── stylelint.config.cjs
-│
-├── checkEnv.js
-│
-├── styles/
-│   └── styles.css
-│
-├── scripts/
-│   ├── main.js
-│   ├── services/
-│   │     └── getCharactersService.js
-│   └── components/
-│         └── renderCharacters.js
-│
-└── .github/
-└── workflows/
-└── linters.yml
+│   ├── workflows/
+│        ├──linters.yml
 
 ## Postman Notes / API Prep
 
 Before writing any JavaScript, I spent time testing The One API in Postman. These notes are from my working document.
 
-* Signed up at[ https://the-one-api.dev
-
-  ](https://the-one-api.dev?utm_source=chatgpt.com)
+* Signed up at[ https://the-one-api.dev](https://the-one-api.dev?utm_source=chatgpt.com)
 * Got an access token
 * Set the token in Postman under Auth as a Bearer Token
 * Created a Postman environment with variables for the base URL and the token
@@ -92,7 +73,7 @@ Some things I noticed while testing:
 * Postman showed the code snippet for the request, so I could see where the Bearer token goes in the axios headers
 
 I also used this blog to understand the Bearer token a little better since it breaks everything down really simply:
-[ https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
+[https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
 
 ---
 
@@ -180,15 +161,25 @@ It runs all the linters on every push. I’ll add npm lint scripts later when mo
 
 ## Current UI
 
-Right now, the HTML includes:
+The UI now includes:
 
-* A page title
-* Search form
-* Placeholder text: “Enter a Character’s Name (first or last) or ID to summon their lore…”
-* Button text: “Speak, Friend, and Search”
-* An empty content div for rendering character cards
+* Title using the MiddleEarth font
+* Subheading in Bilbo font
+* LOTR-themed button text
+* LOTR placeholder text
+* Updated background using a parchment-style radial gradient
+* Styled cards using a parchment overlay + blur
+* All fonts imported through `@font-face` inside `styles.css`
 
-Bootstrap, axios, and lodash are already linked from node_modules.
+### Current CSS setup includes:
+
+**Custom font imports:**
+
+* MiddleEarth (title)
+* Bilbo (body text)
+* MiddleEarth2 (used on the button and cards as the “card” font)
+
+**Gradient background (parchment gold):**
 
 ---
 
@@ -205,12 +196,13 @@ screenshot of how the code snippet is set up for the fetch
 
 ## What’s Next
 
-* Write the axios service to hit the /character endpoint
-* Add support for name or ID lookups
-* Build the render function to display character cards
-* Hook everything together in main.js
-* Add lint scripts once JS is in place
-* Add actual screenshots
+* Build the axios service to hit `/character`
+* Add support for first/last/full-name matching
+* Handle duplicate names gracefully
+* Build render function for cards
+* Connect everything in `main.js`
+* Add npm lint scripts
+* Add UI screenshots after everything works
 
 ---
 
@@ -219,20 +211,20 @@ screenshot of how the code snippet is set up for the fetch
 These are the main things I used while getting everything set up:
 
 * The One API documentation
-  [ https://the-one-api.dev/
-
-  ](https://the-one-api.dev/?utm_source=chatgpt.com)
+  [ https://the-one-api.dev/](https://the-one-api.dev/?utm_source=chatgpt.com)
 * Beginner-friendly explanation of REST APIs (helped with understanding the Bearer token)
-  [ https://rike.dev/blog/rest-apis-for-absolute-beginners
-
-  ](https://rike.dev/blog/rest-apis-for-absolute-beginners)
+  [ https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
 * Postman (used for all initial testing)
-  [ https://www.postman.com/
-
-  ](https://www.postman.com/)
+  [ https://www.postman.com/ ](https://www.postman.com/)
 * CodeX Level 3 and Level 2 API examples (mainly the Pokémon API project structure)
 * GitHub Actions documentation for workflows
   [ https://docs.github.com/en/actions](https://docs.github.com/en/actions)
+* CSS Gradient Generator (used to build the background)
+  [https://cssgradient.io/](https://cssgradient.io/)
+* Bootstrap documentation (used for layout, spacing helpers, and form styling)
+  [ https://getbootstrap.com/docs/](https://getbootstrap.com/docs)
+
+
 
 **
 
