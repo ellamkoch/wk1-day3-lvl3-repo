@@ -17,7 +17,9 @@ This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX where I
   - [Linters and GitHub Workflow](#linters-and-github-workflow)
   - [Current UI](#current-ui)
   - [Screenshots](#screenshots)
+    - [Project Structure](#projet_structure)
     - [Postman](#postman)
+    - [Final](#final)
   - [What’s Next](#whats-next)
   - [Resources](#resources)
 
