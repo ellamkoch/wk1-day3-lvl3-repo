@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lord of the Rings Character Search</title>
+    <!-- bootstrap styles-->
+     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- styles-->
+     <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+<h1 class="title text-center pt-5">Lord of the Rings Character Search</h1>
+ <form class="mainForm d-flex justify-content-center flex-column align-items-center mt-4 mx-auto gap-4" id="mainForm">
+    <div class="mainForm__input">
+    <label for="lotrSearchInput" class="lotrSearch form-label pt-4 fs-1 text-center">Search the One API for info about your favorite characters!</label>
+    <input type="text" name="lotrSearch" id="lotrSearchInput"  class="form-control fs-3" required placeholder="Enter Character Name (first or last) or ID">
+</div>
+
+    <button class="mainForm__submit btn btn-primary fs-4 p-3" id="formSubmit" type="submit">Begin Your Quest</button>
+    </form>
+
+<!--container for results and content. -->
+<div id="content" class="content mt-4 d-flex w-75 mx-auto align-items-center justify-content-center pt-3 .bg-transparent"></div>
+
+
+
+<!-- dependency scripts-->
+<script src="./node_modules/axios/dist/axios.min.js"></script>
+<script src="./node_modules/lodash/lodash.min.js"></script>
+
+<!-- main.js-->
+ <script src="./scripts/main.js" type="module"></script>
+</body>
+</html>
