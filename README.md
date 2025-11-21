@@ -25,35 +25,7 @@ This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX where I
 
 Keeping the layout consistent with what we’ve been doing in class:
 
-project/
-│
-├── index.html
-├── package.json
-├── package-lock.json
-├── .gitignore
-├── .htmlhintrc
-├── eslint.config.cjs
-├── stylelint.config.cjs
-│
-├── checkEnv.js
-│
-├── styles/
-│   ├── styles.css
-│   └── fonts/
-│        ├── MiddleEarth.otf
-│        ├── Bilbo-Regular.ttf
-│        └── MiddleEarth2.ttf
-│
-├── scripts/
-│   ├── main.js
-│   ├── services/
-│   │      └── getCharactersService.js
-│   └── components/
-│   │       └── renderCharacters.js
-│
-└── .github/
-│   ├── workflows/
-│        ├──linters.yml
+![Project Structure](./screenshots/structure/project_structure.png)
 
 ## Postman Notes / API Prep
 
@@ -117,9 +89,7 @@ This starts the server and opens the app in the browser.
 
 To actually fetch data later:
 
-1. Log in at[ https://the-one-api.dev
-
-   ](https://the-one-api.dev?utm_source=chatgpt.com)
+1. Log in at[ https://the-one-api.dev](https://the-one-api.dev?utm_source=chatgpt.com)
 2. Copy your Bearer token
 3. Go to scripts/services/getCharactersService.js
 4. Paste the token into the constant at the top
@@ -185,12 +155,22 @@ The UI now includes:
 
 ## Screenshots
 
+### Project Structure
+
+![Project Structure](./screenshots/structure/project_structure.png)
+screenshot of the project structure in Vscode
+
 ### Postman
 
 ![Successful Postman search](./screenshots/postman/successful_postman_char_search.png)
 Successful Postman search with the-one-api after setting up the environment and collection.
 ![Postman code snippet](./screenshots/postman/postman_code_snippet.png)
 screenshot of how the code snippet is set up for the fetch
+
+### Final
+
+![Page Upon Opening](./screenshots/final/page_b4_search.png)
+screenshot of the page before search criteria is entered
 
 ---
 
@@ -223,8 +203,6 @@ These are the main things I used while getting everything set up:
   [https://cssgradient.io/](https://cssgradient.io/)
 * Bootstrap documentation (used for layout, spacing helpers, and form styling)
   [ https://getbootstrap.com/docs/](https://getbootstrap.com/docs)
-
-
 
 **
 
