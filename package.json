@@ -1,0 +1,46 @@
+{
+  "name": "wk1-day3-lvl3-repo",
+  "version": "1.0.0",
+  "description": "This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check:node": "node scripts/checkEnv.js hello-from-npm-script",
+    "dev": "live-server --port=3000",
+
+    "lint:js": "eslint . --ext .js",
+    "lint:css": "stylelint \"styles/**/*.css\"",
+    "lint:html": "htmlhint ./**/*.html",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+
+    "lint:js:fix": "eslint . --ext .js --fix",
+    "lint:css:fix": "stylelint \"styles/**/*.css\" --fix",
+    "lint:fix": "npm run lint:js:fix && npm run lint:css:fix"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ellamkoch/wk1-day3-lvl3-repo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ellamkoch/wk1-day3-lvl3-repo/issues"
+  },
+  "homepage": "https://github.com/ellamkoch/wk1-day3-lvl3-repo#readme",
+
+  "dependencies": {
+    "axios": "~1.13.2",
+    "bootstrap": "~5.3.8",
+    "lodash": "4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "~9.39.1",
+    "htmlhint": "~1.7.1",
+    "live-server": "~1.2.0",
+    "stylelint": "~16.25.0",
+    "stylelint-config-standard": "~39.0.1"
+  }
+}
