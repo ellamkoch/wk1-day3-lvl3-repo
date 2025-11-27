@@ -118,7 +118,7 @@ module.exports = [
       "prefer-rest-params": "warn",         // Use rest parameters
 
       // ----- Formatting & Style (Indentation, Semicolons) -----
-      "indent": ["error", 2, {              // 2-space indentation
+      "indent": ["error", 4, {              // 2-space indentation
         "SwitchCase": 1,
         "VariableDeclarator": 1,
         "outerIIFEBody": 1,
@@ -160,7 +160,7 @@ module.exports = [
         "skipComments": true
       }],
       "max-lines-per-function": ["warn", {  // Max lines per function
-        "max": 50,
+        "max": 100,
         "skipBlankLines": true,
         "skipComments": true
       }],

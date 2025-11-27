@@ -15,14 +15,16 @@
  <form class="mainForm d-flex justify-content-center flex-column align-items-center mt-4 mx-auto gap-4" id="mainForm">
     <div class="mainForm__input">
     <label for="lotrSearchInput" class="lotrSearch form-label pt-4 fs-1 text-center fw-semi-bold ">Search the One API for info about your favorite characters!</label>
-    <input type="text" name="lotrSearch" id="lotrSearchInput"  class="form-control fs-5" required placeholder="Enter a Character's Name (first or last) or ID to summon their lore…">
+    <input type="text" name="lotrSearch" id="lotrSearchInput"  class="form-control fs-5" required placeholder="Enter a Character's Name (first or last) to summon their lore…">
 </div>
 
     <button class="mainForm__submit btn text-light fs-4 p-3 fw-medium" id="formSubmit" type="submit">Speak, Friend, and Search</button>
     </form>
 
+<!--container for error from API. -->
+<div id="errorBox" class="text-center text-danger fs-2 fw-medium mt-3"></div>
 <!--container for results and content. -->
-<div id="content" class="content mt-4 d-flex w-75 mx-auto align-items-center justify-content-center pt-3 bg-transparent"></div>
+<div id="content" class="contentmt-4 d-flex flex-wrap justify-content-center gap-4 w-75 mx-auto pt-3 bg-transparent"></div>
 
 
 

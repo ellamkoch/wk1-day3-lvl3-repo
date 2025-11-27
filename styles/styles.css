@@ -47,7 +47,11 @@ input {
     background: hsl(158.5, 82.78%, 40.98%)
 }
 
-
+/* Card sizing so they don't turn into tall slivers */
+#content .card {
+  flex: 1 1 320px;         /* base width for each card */
+  max-width: 360px;        /* don't let them get too wide */
+}
 
 /*card styles*/
 .card {
@@ -56,4 +60,38 @@ input {
   font-family: 'card', sans-serif;
 }
 
+.card .list-group-item {
+  background-color: transparent;
+  border-color: rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+  font-size: 1rem;
+}
 
+/* Keep the fancy font just for the card title (Name: Aragorn, etc.) */
+.card .card-title {
+  font-family: "card", serif;
+  font-size: 1.25rem;
+}
+
+/* Fancy label font (Realm, Race, etc.) */
+.card .lotr-label {
+  font-family: "card", serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-right: 0.25rem;
+}
+
+
+/*Error boxy styles*/
+/* Error box styling so it doesn't stretch full width */
+#errorBox {
+  max-width: 50rem;
+  margin: 1rem auto;
+  font-family: "card", serif;
+
+}
+
+#errorBox .alert {
+  margin: 0; /* remove extra spacing inside the container */
+  color: red;
+}
