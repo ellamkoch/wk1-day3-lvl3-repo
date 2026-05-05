@@ -64,10 +64,21 @@ The project focuses on:
 
 ```text
 .
-|-- index.html
-|-- package.json
-|-- vite.config.js
 |-- .env.example
+|-- .gitignore
+|-- .htmlhintrc
+|-- .prettierrc.json
+|-- LICENSE
+|-- README.md
+|-- eslint.config.cjs
+|-- index.html
+|-- package-lock.json
+|-- package.json
+|-- stylelint.config.cjs
+|-- vite.config.js
+|-- github/
+|   `-- workflows/
+|       `-- linters.yml
 |-- scripts/
 |   `-- checkEnv.js
 |-- src/
@@ -79,13 +90,22 @@ The project focuses on:
 |       `-- getCharactersService.js
 |-- styles/
 |   `-- fonts/
+|       |-- Bilbo-Regular.ttf
+|       |-- MiddleEarth.otf
+|       `-- MiddleEarth2.ttf
 |-- screenshots/
 |   |-- final/
+|   |   |-- baggins_search_fixed.png
+|   |   |-- final_aragorn_search.png
+|   |   |-- final_error.png
+|   |   `-- page_b4_search.png
 |   |-- oopsies/
+|   |   |-- baggins_search_lol.png
+|   |   |-- cards_before.png
+|   |   `-- error_oopsie.png
 |   `-- postman/
-`-- github/
-    `-- workflows/
-        `-- linters.yml
+|       |-- postman_code_snippet.png
+|       `-- successful_postman_char_search.png
 ```
 
 ## How It Works
