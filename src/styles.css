@@ -1,17 +1,17 @@
 /*font imports*/
 @font-face {
   font-family: 'MiddleEarth';
-  src: url('./fonts/MiddleEarth.otf') format('opentype');
+  src: url('../styles/fonts/MiddleEarth.otf') format('opentype');
 }
 
 @font-face {
   font-family: 'Bilbo';
-  src: url('./fonts/Bilbo-Regular.ttf') format('truetype');
+  src: url('../styles/fonts/Bilbo-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'card';
-  src: url('./fonts/MiddleEarth2.ttf') format('truetype');
+  src: url('../styles/fonts/MiddleEarth2.ttf') format('truetype');
 }
 
 /*globals*/
