@@ -1,307 +1,272 @@
-# wk1-day3-lvl3-repo
+# Lord of the Rings Character Search
 
-This is the repo for the Week 1, Day 3 assignment for Level 3 with CodeX where I’m pulling character info from The One API. This follows the same idea and structure as the Pokémon API assignment we did in Level 2, but now it’s all Middle-earth themed. I’ve added some custom fonts, a parchment-style gradient background, and card styling so the UI fits the theme better. The goal was to practice async/await, modules, and basic error handling in a real API call (similar to the Pokémon API homework), while also wiring in Bootstrap and Axios from `node_modules.
+A themed single-page character search app built with JavaScript, Axios, Bootstrap, and The One API.
 
---
+This project lets users search for Lord of the Rings characters by name and view returned character details in responsive cards. It was originally built as part of a CodeX API practice project and has been refined as a portfolio piece to show API integration, async JavaScript, modular code structure, and themed UI styling.
 
 ## Table of Contents
 
-- [wk1-day3-lvl3-repo](#wk1-day3-lvl3-repo)
-  - [Table of Contents](#table-of-contents)
-  - [Objective](#objective)
-  - [Project Structure](#project-structure)
-  - [Postman Notes / API Prep](#postman-notes--api-prep)
-  - [Setup (npm)](#setup-npm)
-  - [How to Run](#how-to-run)
-  - [API Token Setup](#api-token-setup)
-  - [checkEnv.js](#checkenvjs)
-  - [Linters and GitHub Workflow](#linters-and-github-workflow)
-  - [Current UI](#current-ui)
-    - [Current CSS setup includes:](#current-css-setup-includes)
-  - [Screenshots](#screenshots)
-    - [Project Structure](#project-structure-1)
-    - [Postman](#postman)
-    - [Final](#final)
-  - [What’s Next](#whats-next)
-  - [Resources](#resources)
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [How It Works](#how-it-works)
+- [Setup](#setup)
+- [API Token Setup](#api-token-setup)
+- [Available Scripts](#available-scripts)
+- [Screenshots](#screenshots)
+- [Future Improvements](#future-improvements)
+- [Resources](#resources)
 
-## Objective
+## Overview
 
-Build a single-page app with:
+The app searches The One API for character data and displays matching results in styled cards. Users can search by first name, last name, or partial character name.
 
-- A search bar that calls an external API
-- At least two JS modules (one default export, one named export)
-- One async function using `async/await` with basic error handling
-- Axios and Bootstrap installed and used as `node_modules`
-- A README that explains how to install, run, and lint the project
+The UI was designed with a Middle-earth-inspired look using custom fonts, a parchment-style gold gradient background, Bootstrap layout utilities, and custom CSS.
 
-## What I Built
+The project focuses on:
 
-### Overall idea
+- Fetching data from a third-party API
+- Using `async/await` for asynchronous requests
+- Organizing JavaScript with modules
+- Handling loading, empty, and error states
+- Rendering API results dynamically
+- Styling a themed responsive layout
 
-- The page lets you search The One API for characters by **first name**, **last name**, or **partial match**.
-- Results are rendered as Bootstrap cards inside a responsive **flexbox layout** using `d-flex`, `flex-wrap`, and spacing utilities so results naturally wrap into rows.
-- If nothing matches, the page displays a simple “No characters found” message instead of a confusing blank space.
-- If the API fails, the app shows a Bootstrap error alert instead of breaking.
+## Features
 
-The result is a simple but clean and functional little LOTR-themed search tool.
-
-Originally the “baggins” search produced one impossibly tall vertical stack of cards that stretched down the screen, so spacing and wrapping were updated to fix that. Screenshots of the “oops” versions are included because it was funny, and because it shows how flexbox saved the layout.
-
-## Project Structure
-
-Keeping the layout consistent with what we’ve been doing in class:
-
-![Project Structure](./screenshots/structure/project_structure(2).png)
-
-### Postman Notes / API Prep
-
-Before writing any JavaScript, I spent time testing The One API in Postman. These notes are from my working document.
-
-* Signed up at[ https://the-one-api.dev](https://the-one-api.dev?utm_source=chatgpt.com)
-* Got an access token
-* Set the token in Postman under Auth as a Bearer Token
-* Created a Postman environment with variables for the base URL and the token
-* Tested the /character endpoint to see the structure of the data
-
-Some things I noticed while testing:
-
-* Some characters have duplicates (like multiple versions of Bilbo)
-* Some characters don’t have a lot of info (only name, no height, hair, etc.)
-* Depending on the name, I might get one result or several
-* Postman showed the code snippet for the request, so I could see where the Bearer token goes in the axios headers
-
-I also used this blog to understand the Bearer token a little better since it breaks everything down really simply:
-[https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
-
-### `index.html`
-
-- Contains the search form, button, and empty containers for results and errors.
-- Imports Bootstrap CSS and axios/lodash from `node_modules`.
-- Loads `scripts/main.js` using `type="module"` so ES modules work correctly.
-
-### `scripts/services/getCharactersService.js`
-
-Contains the **named exports** for the project:
-
-#### `makeAPIRequest(endpoint)` – named export
-
-- Wraps `axios.get()` with an async function
-- Sends the Bearer token using the `Authorization: Bearer` header
-- Extracts the `docs` array from The One API response
-- Returns a simple, normalized object:
-  - `{ success: true, data: docs }`
-  - `{ success: false, error }`
-
-#### `getLotrAPI(charName)` – named export
-
-- Cleans up the search text with `.trim()`
-- Builds the endpoint using the regex-style search supported by The One API:
-  - `/character?name=/searchTerm/i`
-- Calls `makeAPIRequest()` and returns the standardized response
-
-A resource I used for understanding Bearer token placement:
-
-- “REST APIs for Absolute Beginners” (rike.dev)
-  This helped me confirm that the token belongs in the `Authorization` header, not the URL.
-
-  ### `scripts/components/renderCharacters.js`
-
-This file holds the **default export**:
-`renderLotrInfo(apiResponse)`
-
-The renderer:
-
-- Clears any old cards and error messages
-- Checks whether the API call succeeded
-  - If it failed: shows a Bootstrap error alert
-  - If it succeeded but returned zero results: shows a small “No characters found” message
-  - Otherwise: loops through the characters and builds Bootstrap cards
-- Each card shows:
+- Search Lord of the Rings characters by name
+- Supports partial name searches
+- Displays multiple matching characters
+- Responsive Bootstrap card layout
+- Loading spinner while data is being fetched
+- Error message if the API request fails
+- “No characters found” message for empty results
+- Character details including:
   - Name
   - Realm
   - Race
   - Gender
   - Hair color
   - Height
-  - Birth / death dates
-  - Spouse (if available)
-  - A link to the character's LOTR wiki page
+  - Birth and death information
+  - Spouse
+  - Wiki link, when available
 
-Some fields come back as `null` from The One API. For this checkpoint I left them visible so the returned data stays honest.
+## Tech Stack
 
-### `scripts/main.js`
+- HTML
+- CSS
+- JavaScript
+- Axios
+- Bootstrap
+- Lodash
+- Live Server
+- ESLint
+- Stylelint
+- HTMLHint
+- GitHub Actions
 
-This file ties everything together:
+## Project Structure
 
-- Imports the renderer and API functions
-- Sets up the `submit` event on the form
-- Validates user input
-- Shows a Bootstrap loading spinner
-- Calls `getLotrAPI()` using `await`
-- Removes the spinner once data comes back
-- Passes the result directly into `renderLotrInfo()`
+```text
+.
+├── index.html
+├── package.json
+├── scripts/
+│   ├── main.js
+│   ├── components/
+│   │   └── renderCharacters.js
+│   └── services/
+│       ├── checkEnv.js
+│       └── getCharactersService.js
+├── styles/
+│   └── styles.css
+├── screenshots/
+│   ├── final/
+│   ├── oopsies/
+│   ├── postman/
+│   └── structure/
+└── .github/
+    └── workflows/
+        └── linters.yml
+```
 
-This meets the “modules + async function + error handling” checkbox from the rubric.
+## How It Works
 
-### Styling / Bootstrap Usage
+The app is split into service, rendering, and main control logic.
 
-- Bootstrap is included from `node_modules`, as required.
-- Bootstrap utilities used:
-  - `d-flex`
-  - `flex-wrap`
-  - `justify-content-center`
-  - `gap-*`
-  - `alert-*`
-  - `card` components
-- Custom CSS:
-  - LOTR-inspired fonts for headings and labels
-  - Readable default fonts for list values
-  - A gold gradient background for the “One Ring” look
-  - Transparent list backgrounds inside cards so they blend better with the theme
+### API Service
 
-Everything is done with flexbox.
+The API service handles the request to The One API.
 
-The results layout wraps naturally into rows, which also fixed the very funny “Baggins skyscraper” issue I had earlier. Originally, every card stacked in one single vertical column that ran off the page… I’ll drop a screenshot of that in the `screenshots/oopsies` folder for documentation.
+It:
 
-## Screenshots
+* Trims the user’s search input
+* Builds the character search endpoint
+* Sends the Bearer token in the request headers
+* Uses Axios to make the request
+* Returns a standardized success or error response
 
-I included screenshots to show how it went throughout the process, including some entertaing oopsies.
+### Rendering
 
-Screenshots live inside:
+The renderer is responsible for updating the page.
 
-- `screenshots/final/`
-- `screenshots/oopsies/`
-- `screenshots/postman/`
-- `screenshots/structure/`
+It:
 
-## Setup (npm)
+* Clears old search results
+* Displays an error alert if the request fails
+* Displays a no-results message if nothing is found
+* Creates Bootstrap cards for each returned character
+* Keeps the returned API data visible without hiding missing fields
 
-Every new project needs its own dependencies, even if we have used them before. After cloning the repo:
+### Main JavaScript File
 
-* npm install
+The main file connects the form to the API service and renderer.
 
-Then install the project dependencies:
+It:
 
-* npm install axios bootstrap lodash
+* Listens for the form submission
+* Prevents the page from refreshing
+* Validates the search input
+* Shows a loading spinner
+* Calls the API service with `await`
+* Passes the response to the renderer
 
-And the dev tools:
+## Setup
 
-* npm install --save-dev live-server eslint stylelint stylelint-config-standard htmlhint
+Clone the repository:
 
-This is for the lint config files and the GitHub workflow file are included, so linting runs on push.
+<pre class="overflow-visible! px-0!" data-start="5003" data-end="5040"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">git</span><span> clone <your-repo-url></span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
----
+Move into the project folder:
 
-## How to Run
+<pre class="overflow-visible! px-0!" data-start="5073" data-end="5109"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">cd</span><span> <project-folder-name></span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-In package.json, I added:
+Install dependencies:
 
-"scripts": {
+<pre class="overflow-visible! px-0!" data-start="5134" data-end="5157"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-"dev": "live-server --port=3000"
+Install project dependencies if needed:
 
-}
+<pre class="overflow-visible! px-0!" data-start="5200" data-end="5246"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install axios bootstrap lodash</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-Then from the project root:
+Install development tools if needed:
 
-npm run dev
+<pre class="overflow-visible! px-0!" data-start="5286" data-end="5384"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install </span><span class="ͼ12">--save-dev</span><span> live-server eslint stylelint stylelint-config-standard htmlhint</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-This launches the app at localhost:3000.
+Environment Variables
 
-Then type a character name and hit the search button.
+Before running the app locally, create a `.env` file in the project root and add:
 
----
+```bash
+VITE_LOTR_API_TOKEN=your_api_token_here
+```
+
+Make sure `.env` is included in `.gitignore`.
+
+Refer to the following file for an example.
+
+```
+.env.example
+```
+
 
 ## API Token Setup
 
-To actually fetch data later:
+This project uses The One API, which requires a Bearer token.
 
-1. Log in at[ https://the-one-api.dev](https://the-one-api.dev?utm_source=chatgpt.com)
-2. Copy your Bearer token
-3. Go to scripts/services/getCharactersService.js
-4. Paste the token into the constant at the top
-5. Save
+For security, the API token should not be hardcoded directly into the JavaScript source file.
 
-Axios uses the token inside the Authorization header like:
+Create a local environment file in the project root:
 
-Authorization: Bearer `<your-token>`
+```bash
+.env
+```
 
-That gets added in the request once the service file is written.
+Add your API token:
 
----
+<pre class="overflow-visible! px-0!" data-start="496" data-end="547"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ11">VITE_LOTR_API_TOKEN</span><span class="ͼv">=</span><span>your_api_token_here</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-## checkEnv.js
+Then access it in the API service file using Vite’s environment variable format:
 
-Required for this week. This is the Node environment check script we wrote earlier. Run it like:
+<pre class="overflow-visible! px-0!" data-start="631" data-end="695"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼv">const</span><span></span><span class="ͼ11">API_TOKEN</span><span></span><span class="ͼv">=</span><span></span><span class="ͼv">import.</span><span>meta</span><span class="ͼv">.</span><span>env</span><span class="ͼv">.</span><span>VITE_LOTR_API_TOKEN;</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-node scripts/services/checkEnv.js hello
+The request sends the token in the `Authorization` header:
 
-It prints the Node version, current working directory, arguments, and system platform. This helps practice running JS in the terminal.
+<pre class="overflow-visible! px-0!" data-start="757" data-end="803"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ13">Authorization</span><span>: </span><span class="ͼz">`Bearer </span><span>${</span><span class="ͼ11">API_TOKEN</span><span>}</span><span class="ͼz">`</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
----
+The `.env` file should be listed in `.gitignore` so the token is not committed to GitHub.
 
-## Linters and GitHub Workflow
+## Security Note
 
-This project includes:
+This project was updated to remove the API token from the source code.
 
-* ESLint for JS
-* Stylelint for CSS
-* HTMLHint for HTML
+The token is now loaded from an environment variable during local development. This keeps the real key out of the GitHub repository.
 
-The GitHub Actions workflow in `.github/workflows/linters.yml` runs linting on push.
+Before deploying, the token should also be added through the hosting provider’s environment variable settings, such as Netlify or Vercel project settings.
 
-Locally, linters will eventually run via npm scripts (JS already works; CSS config still pending as I had an error in the config I noticed when running it and ran out of time to fix it before turn in).
+## Available Scripts
 
----
+Start the local development server:
 
-## Current UI
+<pre class="overflow-visible! px-0!" data-start="5990" data-end="6013"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> run dev</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-The UI now includes:
+This launches the project locally with Live Server.
 
-* Title using the MiddleEarth font
-* Subheading in Bilbo font
-* LOTR-themed button text
-* LOTR placeholder text
-* Updated background using a parchment-style radial gradient
-* Styled cards using a parchment overlay + blur
-* All fonts imported through `@font-face` inside `styles.css`
+Run the environment check script:
 
-### Current CSS setup includes:
+<pre class="overflow-visible! px-0!" data-start="6103" data-end="6154"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">node</span><span> scripts/services/checkEnv.js hello</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-**Custom font imports:**
+This prints basic Node environment information, including the Node version, current working directory, command line arguments, and platform.
 
-* MiddleEarth (title)
-* Bilbo (body text)
-* MiddleEarth2 (used on the button and cards as the “card” font)
+## Screenshots
 
-**Gradient background (parchment gold):**
+Screenshots are organized into folders:
 
----
+<pre class="overflow-visible! px-0!" data-start="6355" data-end="6450"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute end-1.5 top-1 z-2 md:end-2 md:top-1"></div><div class="relative"><div class="pe-11 pt-3"><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span>screenshots/final/</span><br/><span>screenshots/oopsies/</span><br/><span>screenshots/postman/</span><br/><span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
-## What’s Next
+The `oopsies` folder includes earlier layout issues from development, including a search result layout that stacked too tall before the flexbox wrapping was improved.
 
-* Next steps (optional) would be improving null-field display, adding loading animations, or expanding to other endpoints (quotes, movies).
+## Future Improvements
 
----
+Planned or possible updates:
+
+* Deploy the project with Netlify, Vercel, or GitHub Pages
+* Add pagination for larger result sets
+* Improve how missing or `null` API fields display
+* Move the API token out of the frontend code
+* Add a default character suggestion list
+* Add a clear search/reset button
+* Add better mobile spacing and card sizing
+* Add accessible focus states for keyboard navigation
+* Add a small “recent searches” feature
+* Consider refactoring the styling into Tailwind CSS
+
+## Bootstrap vs. Tailwind Note
+
+This project currently uses Bootstrap, which is useful to keep because it shows experience working with a component and utility framework outside of Tailwind.
+
+A future Tailwind refactor could be worthwhile, especially to improve theme control and custom styling, but I would keep the Bootstrap version first and focus on portfolio polish, deployment, pagination, and token handling before rewriting the CSS framework.
 
 ## Resources
 
-These are the main things I used while getting everything set up:
-
 * The One API documentation
-  [ https://the-one-api.dev/](https://the-one-api.dev/?utm_source=chatgpt.com)
-* Beginner-friendly explanation of REST APIs (helped with understanding the Bearer token)
-  [ https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
-* Postman (used for all initial testing)
-  [ https://www.postman.com/ ](https://www.postman.com/)
-* CodeX Level 3 and Level 2 API examples (mainly the Pokémon API project structure)
-* GitHub Actions documentation for workflows
-  [ https://docs.github.com/en/actions](https://docs.github.com/en/actions)
-* CSS Gradient Generator (used to build the background)
+
+  [https://the-one-api.dev/](https://the-one-api.dev/)
+* REST APIs for Absolute Beginners
+
+  [https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
+* Postman
+
+  [https://www.postman.com/](https://www.postman.com/)
+* Bootstrap Documentation
+
+  [https://getbootstrap.com/docs/](https://getbootstrap.com/docs/)
+* GitHub Actions Documentation
+
+  [https://docs.github.com/en/actions](https://docs.github.com/en/actions)
+* CSS Gradient Generator
+
   [https://cssgradient.io/](https://cssgradient.io/)
-* Bootstrap documentation (used for layout, spacing helpers, and form styling)
-  [ https://getbootstrap.com/docs/](https://getbootstrap.com/docs)
-
-**
-
+* CodeX Level 3 API project requirements and examples
