@@ -1,8 +1,8 @@
 # Lord of the Rings Character Search
 
-A themed single-page character search app built with JavaScript, Axios, Bootstrap, and The One API.
+A themed single-page character search app built with vanilla JavaScript, Vite, Axios, Bootstrap, and The One API.
 
-This project lets users search for Lord of the Rings characters by name and view returned character details in responsive cards. It was originally built as part of a CodeX API practice project and has been refined as a portfolio piece to show API integration, async JavaScript, modular code structure, and themed UI styling.
+This project lets users search for Lord of the Rings characters by name and view returned character details in responsive cards. It was originally built as an API practice project and has been refined as a portfolio piece to show API integration, async JavaScript, modular code structure, environment variable handling, and themed UI styling.
 
 ## Table of Contents
 
@@ -13,6 +13,7 @@ This project lets users search for Lord of the Rings characters by name and view
 - [How It Works](#how-it-works)
 - [Setup](#setup)
 - [API Token Setup](#api-token-setup)
+- [Security Note](#security-note)
 - [Available Scripts](#available-scripts)
 - [Screenshots](#screenshots)
 - [Future Improvements](#future-improvements)
@@ -27,6 +28,7 @@ The UI was designed with a Middle-earth-inspired look using custom fonts, a parc
 The project focuses on:
 
 - Fetching data from a third-party API
+- Keeping private API tokens out of browser code
 - Using `async/await` for asynchronous requests
 - Organizing JavaScript with modules
 - Handling loading, empty, and error states
@@ -41,27 +43,18 @@ The project focuses on:
 - Responsive Bootstrap card layout
 - Loading spinner while data is being fetched
 - Error message if the API request fails
-- “No characters found” message for empty results
-- Character details including:
-  - Name
-  - Realm
-  - Race
-  - Gender
-  - Hair color
-  - Height
-  - Birth and death information
-  - Spouse
-  - Wiki link, when available
+- No-results message for empty searches
+- Character details including name, realm, race, gender, hair color, height, birth and death information, spouse, and wiki link
 
 ## Tech Stack
 
 - HTML
 - CSS
 - JavaScript
+- Vite
 - Axios
 - Bootstrap
 - Lodash
-- Live Server
 - ESLint
 - Stylelint
 - HTMLHint
@@ -71,160 +64,220 @@ The project focuses on:
 
 ```text
 .
-├── index.html
-├── package.json
-├── scripts/
-│   ├── main.js
-│   ├── components/
-│   │   └── renderCharacters.js
-│   └── services/
-│       ├── checkEnv.js
-│       └── getCharactersService.js
-├── styles/
-│   └── styles.css
-├── screenshots/
-│   ├── final/
-│   ├── oopsies/
-│   ├── postman/
-│   └── structure/
-└── .github/
-    └── workflows/
-        └── linters.yml
+|-- index.html
+|-- package.json
+|-- vite.config.js
+|-- .env.example
+|-- scripts/
+|   `-- checkEnv.js
+|-- src/
+|   |-- main.js
+|   |-- styles.css
+|   |-- components/
+|   |   `-- renderCharacters.js
+|   `-- services/
+|       `-- getCharactersService.js
+|-- styles/
+|   `-- fonts/
+|-- screenshots/
+|   |-- final/
+|   |-- oopsies/
+|   `-- postman/
+`-- github/
+    `-- workflows/
+        `-- linters.yml
 ```
 
 ## How It Works
 
-The app is split into service, rendering, and main control logic.
+The app is split into service, rendering, main control logic, and a small Vite server middleware.
 
-### API Service
+### Browser API Service
 
-The API service handles the request to The One API.
+`src/services/getCharactersService.js` handles the browser request.
 
 It:
 
-* Trims the user’s search input
-* Builds the character search endpoint
-* Sends the Bearer token in the request headers
-* Uses Axios to make the request
-* Returns a standardized success or error response
+- Trims the user's search input
+- Builds a local `/api/characters?name=...` request
+- Uses Axios to call the local Vite API route
+- Returns a standardized success or error response
+
+The browser does not receive or send The One API token directly.
+
+### Vite API Middleware
+
+`vite.config.js` adds a local API route during Vite dev and preview.
+
+It:
+
+- Reads `LOTR_API_TOKEN` from `.env`
+- Receives browser requests at `/api/characters`
+- Calls The One API from the Vite server process
+- Adds the Bearer token on the server side
+- Returns The One API response back to the browser
 
 ### Rendering
 
-The renderer is responsible for updating the page.
+`src/components/renderCharacters.js` is responsible for updating the page.
 
 It:
 
-* Clears old search results
-* Displays an error alert if the request fails
-* Displays a no-results message if nothing is found
-* Creates Bootstrap cards for each returned character
-* Keeps the returned API data visible without hiding missing fields
+- Clears old search results
+- Displays an error alert if the request fails
+- Displays a no-results message if nothing is found
+- Creates Bootstrap cards for each returned character
+- Keeps returned API data visible without hiding missing fields
 
 ### Main JavaScript File
 
-The main file connects the form to the API service and renderer.
+`src/main.js` connects the form to the API service and renderer.
 
 It:
 
-* Listens for the form submission
-* Prevents the page from refreshing
-* Validates the search input
-* Shows a loading spinner
-* Calls the API service with `await`
-* Passes the response to the renderer
+- Listens for the form submission
+- Prevents the page from refreshing
+- Validates the search input
+- Shows a loading spinner
+- Calls the API service with `await`
+- Passes the response to the renderer
 
 ## Setup
 
 Clone the repository:
 
-<pre class="overflow-visible! px-0!" data-start="5003" data-end="5040"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">git</span><span> clone <your-repo-url></span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```bash
+git clone <your-repo-url>
+```
 
 Move into the project folder:
 
-<pre class="overflow-visible! px-0!" data-start="5073" data-end="5109"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">cd</span><span> <project-folder-name></span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```bash
+cd <project-folder-name>
+```
 
 Install dependencies:
 
-<pre class="overflow-visible! px-0!" data-start="5134" data-end="5157"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```bash
+npm install
+```
 
-Install project dependencies if needed:
-
-<pre class="overflow-visible! px-0!" data-start="5200" data-end="5246"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install axios bootstrap lodash</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
-
-Install development tools if needed:
-
-<pre class="overflow-visible! px-0!" data-start="5286" data-end="5384"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> install </span><span class="ͼ12">--save-dev</span><span> live-server eslint stylelint stylelint-config-standard htmlhint</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
-
-Environment Variables
-
-Before running the app locally, create a `.env` file in the project root and add:
+Create a local environment file:
 
 ```bash
-VITE_LOTR_API_TOKEN=your_api_token_here
+cp .env.example .env
 ```
 
-Make sure `.env` is included in `.gitignore`.
+On Windows PowerShell, you can use:
 
-Refer to the following file for an example.
-
-```
-.env.example
+```powershell
+Copy-Item .env.example .env
 ```
 
+Add your real The One API token to `.env`:
+
+```env
+LOTR_API_TOKEN=your_real_token_here
+```
+
+Start the Vite dev server:
+
+```bash
+npm run dev
+```
+
+If PowerShell blocks the `npm` shim, use:
+
+```powershell
+npm.cmd run dev
+```
+
+Then open the local URL printed by Vite, usually:
+
+```text
+http://localhost:5173/
+```
 
 ## API Token Setup
 
 This project uses The One API, which requires a Bearer token.
 
-For security, the API token should not be hardcoded directly into the JavaScript source file.
+The token should not be hardcoded in browser JavaScript or stored in any committed source file. This project uses a server-only environment variable:
 
-Create a local environment file in the project root:
-
-```bash
-.env
+```env
+LOTR_API_TOKEN=your_real_token_here
 ```
 
-Add your API token:
+Important:
 
-<pre class="overflow-visible! px-0!" data-start="496" data-end="547"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ11">VITE_LOTR_API_TOKEN</span><span class="ͼv">=</span><span>your_api_token_here</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+- Use `LOTR_API_TOKEN`, not `VITE_LOTR_API_TOKEN`.
+- Variables that start with `VITE_` are exposed to browser code by Vite.
+- `.env` is ignored by Git and should stay private.
+- `.env.example` is safe to commit because it only contains a placeholder value.
 
-Then access it in the API service file using Vite’s environment variable format:
+The browser calls:
 
-<pre class="overflow-visible! px-0!" data-start="631" data-end="695"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼv">const</span><span></span><span class="ͼ11">API_TOKEN</span><span></span><span class="ͼv">=</span><span></span><span class="ͼv">import.</span><span>meta</span><span class="ͼv">.</span><span>env</span><span class="ͼv">.</span><span>VITE_LOTR_API_TOKEN;</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```text
+/api/characters?name=aragorn
+```
 
-The request sends the token in the `Authorization` header:
+The Vite middleware forwards that request to The One API and adds:
 
-<pre class="overflow-visible! px-0!" data-start="757" data-end="803"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ13">Authorization</span><span>: </span><span class="ͼz">`Bearer </span><span>${</span><span class="ͼ11">API_TOKEN</span><span>}</span><span class="ͼz">`</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```text
+Authorization: Bearer <your token>
+```
 
-The `.env` file should be listed in `.gitignore` so the token is not committed to GitHub.
+on the server side.
 
 ## Security Note
 
-This project was updated to remove the API token from the source code.
+This setup keeps the token out of the browser bundle during local development and Vite preview.
 
-The token is now loaded from an environment variable during local development. This keeps the real key out of the GitHub repository.
+If a token was ever committed, pushed to GitHub, or exposed in browser code, rotate or regenerate it if The One API allows that.
 
-Before deploying, the token should also be added through the hosting provider’s environment variable settings, such as Netlify or Vercel project settings.
+For production deployment, a purely static host like GitHub Pages cannot protect a private API token by itself. Use a backend route or serverless function, such as a Netlify Function, Vercel Serverless Function, or another small API server, and store `LOTR_API_TOKEN` in that platform's environment variable settings.
 
 ## Available Scripts
 
 Start the local development server:
 
-<pre class="overflow-visible! px-0!" data-start="5990" data-end="6013"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">npm</span><span> run dev</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```bash
+npm run dev
+```
 
-This launches the project locally with Live Server.
+Create a production build:
 
-Run the environment check script:
+```bash
+npm run build
+```
 
-<pre class="overflow-visible! px-0!" data-start="6103" data-end="6154"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span class="ͼ10">node</span><span> scripts/services/checkEnv.js hello</span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+Preview the production build locally:
 
-This prints basic Node environment information, including the Node version, current working directory, command line arguments, and platform.
+```bash
+npm run preview
+```
+
+Run all linters:
+
+```bash
+npm run lint
+```
+
+Run the Node environment check script:
+
+```bash
+node scripts/checkEnv.js hello
+```
 
 ## Screenshots
 
 Screenshots are organized into folders:
 
-<pre class="overflow-visible! px-0!" data-start="6355" data-end="6450"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute end-1.5 top-1 z-2 md:end-2 md:top-1"></div><div class="relative"><div class="pe-11 pt-3"><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼs ͼ16"><div class="cm-scroller"><pre class="cm-content q9tKkq_readonly m-0"><code><span>screenshots/final/</span><br/><span>screenshots/oopsies/</span><br/><span>screenshots/postman/</span><br/><span></code></pre></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
+```text
+screenshots/final/
+screenshots/oopsies/
+screenshots/postman/
+```
 
 The `oopsies` folder includes earlier layout issues from development, including a search result layout that stacked too tall before the flexbox wrapping was improved.
 
@@ -232,41 +285,27 @@ The `oopsies` folder includes earlier layout issues from development, including 
 
 Planned or possible updates:
 
-* Deploy the project with Netlify, Vercel, or GitHub Pages
-* Add pagination for larger result sets
-* Improve how missing or `null` API fields display
-* Move the API token out of the frontend code
-* Add a default character suggestion list
-* Add a clear search/reset button
-* Add better mobile spacing and card sizing
-* Add accessible focus states for keyboard navigation
-* Add a small “recent searches” feature
-* Consider refactoring the styling into Tailwind CSS
+- Deploy the project with a backend route or serverless function for production API requests
+- Add pagination for larger result sets
+- Improve how missing or `null` API fields display
+- Add a default character suggestion list
+- Add a clear search/reset button
+- Add better mobile spacing and card sizing
+- Add accessible focus states for keyboard navigation
+- Add a small recent searches feature
 
 ## Bootstrap vs. Tailwind Note
 
 This project currently uses Bootstrap, which is useful to keep because it shows experience working with a component and utility framework outside of Tailwind.
 
-A future Tailwind refactor could be worthwhile, especially to improve theme control and custom styling, but I would keep the Bootstrap version first and focus on portfolio polish, deployment, pagination, and token handling before rewriting the CSS framework.
+A future Tailwind refactor could be worthwhile, especially to improve theme control and custom styling, but the Bootstrap version is worth keeping first while focusing on portfolio polish, deployment, pagination, and secure token handling.
 
 ## Resources
 
-* The One API documentation
-
-  [https://the-one-api.dev/](https://the-one-api.dev/)
-* REST APIs for Absolute Beginners
-
-  [https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
-* Postman
-
-  [https://www.postman.com/](https://www.postman.com/)
-* Bootstrap Documentation
-
-  [https://getbootstrap.com/docs/](https://getbootstrap.com/docs/)
-* GitHub Actions Documentation
-
-  [https://docs.github.com/en/actions](https://docs.github.com/en/actions)
-* CSS Gradient Generator
-
-  [https://cssgradient.io/](https://cssgradient.io/)
-* CodeX Level 3 API project requirements and examples
+- The One API documentation: [https://the-one-api.dev/](https://the-one-api.dev/)
+- REST APIs for Absolute Beginners: [https://rike.dev/blog/rest-apis-for-absolute-beginners](https://rike.dev/blog/rest-apis-for-absolute-beginners)
+- Postman: [https://www.postman.com/](https://www.postman.com/)
+- Bootstrap Documentation: [https://getbootstrap.com/docs/](https://getbootstrap.com/docs/)
+- Vite Documentation: [https://vite.dev/](https://vite.dev/)
+- GitHub Actions Documentation: [https://docs.github.com/en/actions](https://docs.github.com/en/actions)
+- CSS Gradient Generator: [https://cssgradient.io/](https://cssgradient.io/)
