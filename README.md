@@ -167,13 +167,13 @@ It:
 Clone the repository:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/ellamkoch/lotr-char-search
 ```
 
 Move into the project folder:
 
 ```bash
-cd <project-folder-name>
+cd lotr-char-search
 ```
 
 Install dependencies:
