@@ -167,7 +167,7 @@ It:
 Clone the repository:
 
 ```bash
-git clone https://github.com/ellamkoch/lotr-char-search
+git clone https://github.com/ellamkoch/lotr-char-search.git
 ```
 
 Move into the project folder:
