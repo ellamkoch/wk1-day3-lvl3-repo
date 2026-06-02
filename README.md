@@ -54,7 +54,6 @@ The project focuses on:
 - Vite
 - Axios
 - Bootstrap
-- Lodash
 - ESLint
 - Stylelint
 - HTMLHint
