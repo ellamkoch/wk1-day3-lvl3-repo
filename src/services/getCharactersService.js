@@ -1,8 +1,11 @@
 //This file holds all async functions that fetch data from the One API using Axios.
 // Exported functions can be imported into main.js or other files
-// variable
-const baseUrl = "/api"; // local API route handled by Vite so the token stays server-side
-const charEndpoint = "/characters?name="; // endpoint to search for characters
+import axios from "axios";
+
+const localBaseUrl = "/api"; // local API route handled by Vite so the token stays server-side
+const serverlessBaseUrl = "/.netlify/functions/lotr-characters"; // Netlify function endpoint for production
+const baseUrl = import.meta.env.PROD ? serverlessBaseUrl : localBaseUrl;
+const charEndpoint = import.meta.env.PROD ? "?name=" : "/characters?name="; // endpoint differs between local dev and Netlify function
 
 // base function for api requests
 // util function
